@@ -1,18 +1,19 @@
-// Your program should start at this line.
-/*
-Example:
-Move();
-Move();
-Move();
-Turn();
-Move();
-Move();
-Turn();
-Turn();
-Turn();
-Move();
-*/
+while(true)
+{
+    if(AtGoal())
+    {
+        break;
+    }
 
+    if(Peek())
+    {
+        Move();
+    }
+    else
+    {
+        Turn();
+    }
+}
 
 #region Basic functions
 // These functions are just her to make your intelisense work. 
