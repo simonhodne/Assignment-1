@@ -1,17 +1,23 @@
-// Your program should start at this line.
-/*
-Example:
-Move();
-Move();
-Move();
-Turn();
-Move();
-Move();
-Turn();
-Turn();
-Turn();
-Move();
-*/
+const int FACING_BACKWARDS = 2;
+int turnCount = 0;
+while(true)
+{
+    if(AtGoal())
+    {
+        break;
+    }
+
+    if(Peek() && turnCount != FACING_BACKWARDS)
+    {
+        Move();
+        turnCount = 0;
+    }
+    else
+    {
+        Turn();
+        turnCount++;
+    }
+}
 
 
 #region Basic functions
