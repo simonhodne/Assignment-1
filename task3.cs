@@ -1,3 +1,4 @@
+const int FACING_BACKWARDS = 2;
 int turnCount = 0;
 while(true)
 {
@@ -6,7 +7,7 @@ while(true)
         break;
     }
 
-    if(Peek() && turnCount != 2)
+    if(Peek() && turnCount != FACING_BACKWARDS)
     {
         Move();
         turnCount = 0;
