@@ -4,12 +4,30 @@ static void Main()
     pathfinder.Run();
 }
 
+public enum Orientation
+{
+    Left = 0,
+    Right = 180,
+    Up = 90,
+    Down = 270
+}
+
+public class Crossroad
+{
+    public int[] coordinates {get; set;}
+    public bool exploredLeft {get;set;}
+    public bool exploredRight {get;set;}
+    public bool exploredUp {get;set;}
+    public bool exploredDown {get;set;}
+    public int origin {get;set;}
+}
 
 public class Pathfinder
 {
     const int FACING_BACKWARDS = 2;
     int turnCount = 0;
     int orientation = 0;
+    int[] position = new int[]{0,0};
     Stack<Crossroad> crossRStack = new Stack<Crossroad>();
 
     public void Run()
@@ -27,7 +45,7 @@ public class Pathfinder
                 try
                 {
                     Crossroad previousCrossroad = crossRStack.Pop();
-                    if(GetPosition() == previousCrossroad.coordinates)
+                    if(GetPosition(position) == previousCrossroad.coordinates)
                     {
                         bool isExplored = ChoosePath(previousCrossroad);
                         if(orientation == (int)Orientation.Left)
@@ -51,6 +69,7 @@ public class Pathfinder
                             crossRStack.Push(previousCrossroad);
                         }
                         Move();
+                        TrackPosition();
                             
                     }
                     else
@@ -68,26 +87,39 @@ public class Pathfinder
             else if(Peek() && turnCount != FACING_BACKWARDS)
             {
                 Move();
+                TrackPosition();
                 turnCount = 0;
             }
             else
             {
                 Turn();
+                TrackOrientation();
                 turnCount++;
             }
         }
     }    
 
-    #region Basic functions
-    // These functions are just her to make your intelisense work. 
-    // They only have a conceptual function.
-
-    static void Move()
+    void TrackPosition()
     {
-        // Moves the car 1 cell in the direction it is heading. 
+        switch (orientation)
+        {
+            case (int)Orientation.Left:
+                position[0]--;
+                break;
+            case (int)Orientation.Up:
+                position[1]++;
+                break;
+            case (int)Orientation.Right:
+                position[0]++;
+                break;
+            case (int)Orientation.Down:
+                position[1]--;
+                break;
+            default:break;
+        }
     }
 
-    void Turn()
+    void TrackOrientation()
     {
         if(orientation == 270)
         {
@@ -97,27 +129,12 @@ public class Pathfinder
         {
             orientation += 90;
         }
-        // Turns the car 90 deg clockwise.
     }
 
-    bool Peek()
-    {
-        // Returns true if the next cell is open, otherwise false.
-        return true; // Just a placeholder value. 
-    }
-
-    bool AtGoal()
-    {
-        // Returns true if the current cell is the goal cell.
-        return true; // just a placholder
-    }
-
-    #endregion
-
-    int[] GetPosition()
+    int[] GetPosition(int[] pos)
     {
         int[] position = new int[2];
-        //Gets the current position of the car
+        position = pos;
         return position;
     }
 
@@ -182,6 +199,7 @@ public class Pathfinder
         while(orientation != direction)
         {
             Turn();
+            TrackOrientation();
         }
     }
 
@@ -189,7 +207,7 @@ public class Pathfinder
     {
         Crossroad crossroad = new Crossroad()
         {
-            coordinates = GetPosition()
+            coordinates = GetPosition(position)
         };
         switch (orientation)
         {
@@ -214,22 +232,32 @@ public class Pathfinder
         crossRStack.Push(crossroad);
     }
 
-    
-}
-public enum Orientation
-{
-    Left = 0,
-    Right = 180,
-    Up = 90,
-    Down = 270
-}
-public class Crossroad
-{
-    public int[] coordinates {get; set;}
-    public bool exploredLeft {get;set;}
-    public bool exploredRight {get;set;}
-    public bool exploredUp {get;set;}
-    public bool exploredDown {get;set;}
-    public int origin {get;set;}
+    #region Basic functions
+    // These functions are just her to make your intelisense work. 
+    // They only have a conceptual function.
+
+    static void Move()
+    {
+        // Moves the car 1 cell in the direction it is heading. 
+    }
+
+    void Turn()
+    {
+        // Turns the car 90 deg clockwise.
+    }
+
+    bool Peek()
+    {
+        // Returns true if the next cell is open, otherwise false.
+        return true; // Just a placeholder value. 
+    }
+
+    bool AtGoal()
+    {
+        // Returns true if the current cell is the goal cell.
+        return true; // just a placholder
+    }
+
+    #endregion    
 }
 
